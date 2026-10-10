@@ -424,3 +424,167 @@ FROM customer
 UNION ALL
 SELECT customer_id
 FROM booking;
+
+SELECT DISTINCT c.customer_id
+FROM customer c
+INNER JOIN booking b
+    ON c.customer_id = b.customer_id;
+    
+    
+SELECT m.movie_id,
+       m.title,
+       s.show_date,
+       s.show_time,
+       sc.screen_name,
+       t.theatre_name
+FROM movie_details m
+JOIN showtime s
+    ON m.movie_id = s.movie_id
+JOIN screen sc
+    ON s.screen_id = sc.screen_id
+JOIN theatre t
+    ON sc.theatre_id = t.theatre_id;
+
+SELECT c.customer_id,
+       c.customer_name,
+       m.title,
+       s.show_date,
+       s.show_time,
+       b.status
+FROM customer c
+JOIN booking b
+    ON c.customer_id = b.customer_id
+JOIN showtime s
+    ON b.show_id = s.show_id
+JOIN movie_details m
+    ON s.movie_id = m.movie_id;
+    
+SELECT c.customer_name,
+       b.booking_id,
+       b.status,
+       p.amount,
+       p.payment_method,
+       p.payment_status
+FROM customer c
+JOIN booking b
+    ON c.customer_id = b.customer_id
+JOIN payment p
+    ON b.booking_id = p.booking_id;
+    
+CREATE VIEW customer_view AS
+SELECT customer_id, customer_name, city
+FROM customer
+WHERE city IS NOT NULL;
+
+
+SELECT * FROM customer_view;
+
+CREATE VIEW movie_schedule_view AS
+SELECT m.movie_id,
+       m.title,
+       s.show_date,
+       s.show_time,
+       s.ticket_price,
+       sc.screen_name,
+       t.theatre_name
+FROM movie_details m
+JOIN showtime s
+    ON m.movie_id = s.movie_id
+JOIN screen sc
+    ON s.screen_id = sc.screen_id
+JOIN theatre t
+    ON sc.theatre_id = t.theatre_id;
+    
+select * from movie_schedule_view;
+
+CREATE VIEW expensive_show_view AS
+SELECT show_id, movie_id, show_date, show_time, ticket_price
+FROM showtime
+WHERE ticket_price > 200;
+
+SELECT * FROM expensive_show_view;
+DROP VIEW expensive_show_view;
+
+SELECT show_id, movie_id, ticket_price
+FROM showtime
+WHERE ticket_price = (
+    SELECT MAX(ticket_price)
+    FROM showtime
+);
+
+SELECT show_id, movie_id, ticket_price
+FROM showtime
+WHERE ticket_price > (
+    SELECT AVG(ticket_price)
+    FROM showtime
+);
+SELECT movie_id, title
+FROM movie_details
+WHERE movie_id IN (
+    SELECT movie_id
+    FROM showtime
+);
+
+SELECT customer_id, customer_name
+FROM customer
+WHERE customer_id IN (
+    SELECT customer_id
+    FROM booking
+);
+
+SELECT show_id, ticket_price
+FROM showtime
+WHERE ticket_price > ANY (
+    SELECT ticket_price
+    FROM showtime
+    WHERE show_date = '2026-10-11'
+);
+
+SELECT show_id, ticket_price
+FROM showtime
+WHERE ticket_price > ALL (
+    SELECT ticket_price
+    FROM showtime
+    WHERE show_date = '2026-10-11'
+);
+
+SELECT c.customer_id, c.customer_name
+FROM customer c
+WHERE EXISTS (
+    SELECT 1
+    FROM booking b
+    WHERE b.customer_id = c.customer_id
+);
+
+SELECT c.customer_id, c.customer_name
+FROM customer c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM booking b
+    WHERE b.customer_id = c.customer_id
+);
+
+SELECT movie_id, title
+FROM movie_details
+WHERE movie_id IN (
+    SELECT movie_id
+    FROM showtime
+    WHERE ticket_price > (
+        SELECT AVG(ticket_price)
+        FROM showtime
+    )
+);
+
+
+CREATE VIEW confirmed_booking_view AS
+SELECT b.booking_id,
+       c.customer_name,
+       b.show_id,
+       b.booking_date,
+       b.status
+FROM booking b
+JOIN customer c
+    ON b.customer_id = c.customer_id
+WHERE b.status = 'CONFIRMED';
+
+SELECT * FROM confirmed_booking_view;
