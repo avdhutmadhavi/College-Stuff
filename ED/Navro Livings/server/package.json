@@ -1,0 +1,20 @@
+{
+  "name": "navro-living-server",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test src/app.test.js",
+    "db:seed:demo": "node src/scripts/run-sql.js ../../../sql/demo-seed.sql"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "mysql2": "^3.11.5",
+    "zod": "^3.24.1"
+  }
+}
