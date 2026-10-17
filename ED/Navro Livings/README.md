@@ -114,8 +114,8 @@ One free static-hosting option is Render:
 3. Leave the repository root directory unset so the build can access both `ED/Navro Livings/client` and `ED/Navro Livings/assets`.
 4. Set the build command to `cd "ED/Navro Livings/client" && npm ci && npm run build:preview`.
 5. Set the publish directory to `ED/Navro Livings/client/dist`.
-6. Add a rewrite rule from `/*` to `/index.html` so direct visits to React routes work.
-7. Deploy the site and test the home, shop, guide, contact, and checkout routes on the provided public URL.
+6. Deploy the site. The static preview uses hash-based routes, so use links such as `https://your-site.onrender.com/#/shop` for direct visits and bookmarks.
+7. Test the home, shop, guide, contact, and checkout routes on the provided public URL.
 
 Render account authorization happens in Render/GitHub's own sign-in flow; never send a password, access token, or database credential in chat. This free static preview has no persistent backend and is not a live store. Hosting/API/database plans and usage limits can change, so review the provider's current terms before launch.
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import { isStaticPreview } from "./api";
 import { CartProvider } from "./CartContext";
 import { Footer, Header } from "./components";
@@ -47,6 +47,12 @@ function Layout() {
   </>;
 }
 
+function RoutedApp() {
+  return <CartProvider><Layout /></CartProvider>;
+}
+
 export default function App() {
-  return <BrowserRouter><CartProvider><Layout /></CartProvider></BrowserRouter>;
+  return isStaticPreview
+    ? <HashRouter><RoutedApp /></HashRouter>
+    : <BrowserRouter><RoutedApp /></BrowserRouter>;
 }
